@@ -31,7 +31,7 @@ export class CreateTransactions1617299262335 implements MigrationInterface {
             {
               name: 'forma_pagamento',
               type: 'enum',
-              enum: ['debit', 'credit', 'cash']
+              enum: ['debit', 'credit', 'cash', 'pix']
             },
             {
               name: 'status_pagamento',
