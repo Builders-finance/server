@@ -8,6 +8,8 @@ import PaymentStatus from '../typeorm/enums/TransactionPaymentStatusEnum';
 const transactionsRouter = Router();
 const transactionsController = new TransactionsController();
 
+transactionsRouter.get('/', transactionsController.index);
+
 transactionsRouter.post(
   '/',
   celebrate({
