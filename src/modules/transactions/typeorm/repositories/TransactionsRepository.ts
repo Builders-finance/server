@@ -22,6 +22,15 @@ export class TransactionsRepository{
     return await this.repo.save(transaction);
   }
 
+  public async getJoin() {
+    //inner join and paginate
+    let transactions = await this.repo.createQueryBuilder('transaction')
+      .innerJoin('rev_exp', 'revexp', 'revexp.id = transaction.rev_exp_id')
+      .addSelect('revexp.name')
+      .getRawMany()
+    return transactions;
+  }
+
   public async paginate() {
     return await this.repo.createQueryBuilder().paginate();
   }

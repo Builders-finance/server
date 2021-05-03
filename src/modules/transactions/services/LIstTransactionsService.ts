@@ -12,6 +12,7 @@ interface IPagination {
   next_page: number | null;
   data: Transaction[];
 }
+
 @injectable()
 class ListTransactionService {
   constructor(
@@ -19,11 +20,11 @@ class ListTransactionService {
     private transactionsRepository: TransactionsRepository
     ) {};
 
-  public async execute(): Promise<IPagination> {
+  public async execute(): Promise<any> {
 
-    const transaction = await this.transactionsRepository.paginate();
+    const transaction = await this.transactionsRepository.getJoin();
 
-    return transaction as IPagination;
+    return transaction
   }
 }
 
