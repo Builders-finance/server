@@ -9,10 +9,10 @@ class Transaction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('uuid',{nullable: true})
   rev_exp_id: string;
 
-  @Column()
+  @Column('uuid',{nullable: true})
   user_id: string;
 
   @Column()
