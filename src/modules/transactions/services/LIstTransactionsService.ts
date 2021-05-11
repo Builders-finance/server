@@ -23,7 +23,7 @@ class ListTransactionService {
   public async execute(): Promise<any> {
 
     const transaction = await this.transactionsRepository.getJoin();
-
+    console.log(transaction)
     return transaction
   }
 }
