@@ -20,11 +20,11 @@ class ListRevExpService {
     private revExpRepository: RevExpRepository
     ) {};
 
-  public async execute(): Promise<IPagination> {
+  public async execute(): Promise<any> {
 
     const revExp = await this.revExpRepository.paginate();
 
-    return revExp as IPagination;
+    return revExp;
   }
 }
 
