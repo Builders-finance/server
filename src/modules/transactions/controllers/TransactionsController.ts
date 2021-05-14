@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { container } from 'tsyringe';
 import CreateTransactionService from "../services/CreateTransactionService";
 import ListTransactionService from "../services/LIstTransactionsService";
+import ShowTransactionsService from "../services/ShowTransactionsService";
 
 export default class TransactionsController {
 
@@ -20,6 +21,16 @@ export default class TransactionsController {
     const execListTransaction = await listTransaction.execute();
 
     return response.json(execListTransaction);
+  }
+
+  public async show(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+
+    const showTransactions = container.resolve(ShowTransactionsService);
+
+    const transaction = await showTransactions.execute({ id });
+
+    return response.json(transaction);
   }
 
 }

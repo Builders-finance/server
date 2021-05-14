@@ -11,7 +11,7 @@ export default class SessionController {
     const user = await createSession.execute({
       email,
       password,
-    }).catch(err => console.log(err));
+    });
 
     return response.json(classToClass(user));
   }

@@ -66,6 +66,11 @@ export class TransactionsRepository{
   public async paginate() {
     return await this.repo.createQueryBuilder().paginate();
   }
+
+  public async findById(id: string): Promise<Transaction[] | undefined> {
+    let trans = this.repo.createQueryBuilder('transaction').where("transaction.rev_exp_id = :id", { id: id }).getMany();
+    return await trans
+  }
 }
 
 export default TransactionsRepository;
