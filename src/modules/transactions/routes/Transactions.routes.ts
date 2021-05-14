@@ -10,6 +10,14 @@ const transactionsController = new TransactionsController();
 
 transactionsRouter.get('/', transactionsController.index);
 
+transactionsRouter.get('/:id',
+celebrate({
+  [Segments.PARAMS]: {
+    id: Joi.string().uuid().required(),
+  },
+}),
+transactionsController.show);
+
 transactionsRouter.post(
   '/',
   celebrate({
