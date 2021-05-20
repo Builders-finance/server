@@ -28,7 +28,7 @@ export class TransactionsRepository{
     let transactions = this.repo
       .createQueryBuilder('transaction')
       .innerJoin('rev_exp', 'revexp', 'revexp.id = transaction.rev_exp_id')
-      .addSelect(['revexp.name', 'revexp.rev_exp_id'])
+      .addSelect(['revexp.name', 'revexp.rev_exp_id', 'revexp.rec_des', 'revexp.icon'])
       .getRawMany();
 
     const result = (await transactions).map((tr, i, array) => {
@@ -36,6 +36,8 @@ export class TransactionsRepository{
       let filtered = {
         nome: tr.revexp_name,
         valor: tr.transaction_valor,
+        rec_des: tr.revexp_rec_des,
+        icon: tr.revexp_icon,
         id: tr.transaction_rev_exp_id
       }
       return filtered

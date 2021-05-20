@@ -14,6 +14,9 @@ class RevExp {
   description: string;
 
   @Column({nullable: true})
+  icon: string;
+
+  @Column({nullable: true})
   rev_exp_id: string;
 
   @Column('int', {default: 1})

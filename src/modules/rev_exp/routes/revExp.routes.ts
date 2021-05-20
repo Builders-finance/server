@@ -13,6 +13,7 @@ revExpRouter.post(
     [Segments.BODY]: Joi.object().keys({
       name: Joi.string().required(),
       description: Joi.string(),
+      icon: Joi.string(),
       rec_des: Joi.number().required(),
       rev_exp_id: Joi.string().uuid()
     })
