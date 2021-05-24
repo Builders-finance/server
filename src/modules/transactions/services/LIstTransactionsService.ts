@@ -20,10 +20,9 @@ class ListTransactionService {
     private transactionsRepository: TransactionsRepository
     ) {};
 
-  public async execute(): Promise<any> {
+  public async execute(userId: string): Promise<any> {
 
-    const transaction = await this.transactionsRepository.getJoin();
-    console.log(transaction)
+    const transaction = await this.transactionsRepository.getJoin(userId);
     return transaction
   }
 }

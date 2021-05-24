@@ -22,7 +22,7 @@ class ListRevExpService {
 
   public async execute(): Promise<any> {
 
-    const revExp = await this.revExpRepository.paginate();
+    const revExp = await this.revExpRepository.findCategories();
 
     return revExp;
   }

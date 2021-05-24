@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, getConnection} from 'typeorm';
+import { EntityRepository, Repository, getConnection, IsNull} from 'typeorm';
 import RevExp from '../entities/RevExp';
 
 @EntityRepository(RevExp)
@@ -25,6 +25,15 @@ export class RevExpRepository{
   public async paginate() {
     return await this.repo.createQueryBuilder().paginate();
   }
+
+  public async findCategories() {
+    return await this.repo
+    .createQueryBuilder("rev_exp")
+    .where("rev_exp.rev_exp_id is null")
+    .paginate();
+  }
+
 }
+
 
 export default RevExpRepository;

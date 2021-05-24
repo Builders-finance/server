@@ -1,14 +1,16 @@
 import { Router } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 import RevExpController from '../controllers/RevExpController';
+import isAuthenticated from '@shared/http/middlewares/isAuthenticated';
 
 const revExpRouter = Router();
 const revExpController = new RevExpController();
 
-revExpRouter.get('/', revExpController.index);
+revExpRouter.get('/', isAuthenticated, revExpController.index);
 
 revExpRouter.post(
   '/',
+  isAuthenticated,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       name: Joi.string().required(),
