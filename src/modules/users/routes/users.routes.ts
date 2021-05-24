@@ -18,6 +18,7 @@ usersRouter.get('/', isAuthenticated, userController.index);
 
 usersRouter.get(
   '/:id',
+  isAuthenticated,
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),

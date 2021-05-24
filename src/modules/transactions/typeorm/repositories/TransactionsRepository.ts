@@ -22,11 +22,12 @@ export class TransactionsRepository{
     return await this.repo.save(transaction);
   }
 
-  public async getJoin() {
+  public async getJoin(userId: string) {
     //inner join and paginate
 
     let transactions = this.repo
       .createQueryBuilder('transaction')
+      .where("transaction.user_id = :id", { id: userId })
       .innerJoin('rev_exp', 'revexp', 'revexp.id = transaction.rev_exp_id')
       .addSelect(['revexp.name', 'revexp.rev_exp_id'])
       .getRawMany();

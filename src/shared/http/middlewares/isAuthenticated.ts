@@ -30,6 +30,7 @@ export default function isAuthenticated(request: Request, response: Response, ne
         id: sub,
       }
 
+      response.locals.user = sub;
       return next();
     } catch {
       throw new AppError('Invalid JWT Token.');

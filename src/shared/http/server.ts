@@ -22,7 +22,7 @@ app.use(errors());
 
 //Error middleware
 app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
-  console.log('AQUI',error);
+  console.log('ERRO EXT',error);
   if (error instanceof AppError) {
     return response.status(error.statusCode).json({
       status: 'error',

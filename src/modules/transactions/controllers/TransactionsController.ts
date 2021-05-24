@@ -16,9 +16,10 @@ export default class TransactionsController {
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
+    const userId = response.locals.user;
     const listTransaction = container.resolve(ListTransactionService);
 
-    const execListTransaction = await listTransaction.execute();
+    const execListTransaction = await listTransaction.execute(userId);
 
     return response.json(execListTransaction);
   }

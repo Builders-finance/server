@@ -4,13 +4,15 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import TransactionsController from '../controllers/TransactionsController';
 import PaymentType from '../typeorm/enums/TransactionPaymentTypeEnum';
 import PaymentStatus from '../typeorm/enums/TransactionPaymentStatusEnum';
+import isAuthenticated from '@shared/http/middlewares/isAuthenticated';
 
 const transactionsRouter = Router();
 const transactionsController = new TransactionsController();
 
-transactionsRouter.get('/', transactionsController.index);
+transactionsRouter.get('/', isAuthenticated, transactionsController.index);
 
 transactionsRouter.get('/:id',
+isAuthenticated,
 celebrate({
   [Segments.PARAMS]: {
     id: Joi.string().uuid().required(),
@@ -20,6 +22,7 @@ transactionsController.show);
 
 transactionsRouter.post(
   '/',
+  isAuthenticated,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       description: Joi.string().allow(null, ''),
