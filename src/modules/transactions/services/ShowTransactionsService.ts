@@ -2,6 +2,7 @@
 
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
+import Transaction from '../typeorm/entities/Transaction';
 import TransactionsRepository from '../typeorm/repositories/TransactionsRepository';
 
 interface IRequest {
@@ -15,7 +16,7 @@ class ShowTransactionsService {
     private transactionsRepository: TransactionsRepository
     ) {};
 
-  public async execute({ id }: IRequest): Promise<any> {
+  public async execute({ id }: IRequest): Promise<Transaction> {
 
     const transactions = await this.transactionsRepository.findById(id);
 

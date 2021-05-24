@@ -20,9 +20,9 @@ class ListRevExpService {
     private revExpRepository: RevExpRepository
     ) {};
 
-  public async execute(): Promise<any> {
+  public async execute(userId: string): Promise<any> {
 
-    const revExp = await this.revExpRepository.findCategories();
+    const revExp = await this.revExpRepository.findCategories(userId);
 
     return revExp;
   }

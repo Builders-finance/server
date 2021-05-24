@@ -32,6 +32,7 @@ export class TransactionsRepository{
       .addSelect(['revexp.name', 'revexp.rev_exp_id'])
       .getRawMany();
 
+
     const result = (await transactions).map((tr, i, array) => {
 
       let filtered = {
@@ -68,8 +69,8 @@ export class TransactionsRepository{
     return await this.repo.createQueryBuilder().paginate();
   }
 
-  public async findById(id: string): Promise<Transaction[] | undefined> {
-    let trans = this.repo.createQueryBuilder('transaction').where("transaction.rev_exp_id = :id", { id: id }).getMany();
+  public async findById(id: string): Promise<Transaction | undefined> {
+    let trans = this.repo.createQueryBuilder('transaction').where("transaction.id = :id", { id: id }).getOne();
     return await trans
   }
 }
