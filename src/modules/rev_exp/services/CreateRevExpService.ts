@@ -8,6 +8,7 @@ interface IRequest {
   name: string;
   description: string;
   rev_exp_id: string;
+  user_id: string;
 }
 
 @injectable()
@@ -17,8 +18,8 @@ class CreateRevExpService {
     private revExpRepository: RevExpRepository
     ) {};
 
-  public async execute(revExp: IRequest): Promise<RevExp> {
-
+  public async execute(revExp: IRequest, userId: string): Promise<RevExp> {
+    revExp.user_id = userId;
     return await this.revExpRepository.create(revExp as RevExp);
 
   }

@@ -19,6 +19,9 @@ class RevExp {
   @Column({nullable: true})
   rev_exp_id: string;
 
+  @Column({nullable: true})
+  user_id: string;
+
   @Column('int', {default: 1})
   status: number = 1;
 
