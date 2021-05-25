@@ -1,4 +1,5 @@
-import {Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {Column, CreateDateColumn, Entity, Generated, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import User from './User';
 
 @Entity('user_tokens')
 class UserToken {
@@ -17,6 +18,10 @@ class UserToken {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(type => User, user => user.transactions)
+  @JoinColumn({  name: "user_id", referencedColumnName: "id" })
+  user: User;
 
 }
 

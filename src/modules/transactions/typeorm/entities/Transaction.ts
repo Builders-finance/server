@@ -1,7 +1,7 @@
 import PaymentType from '../enums/TransactionPaymentTypeEnum';
 import RevExp from '../../../../modules/rev_exp/typeorm/entities/RevExp';
 import User from '../../../../modules/users/typeorm/entities/User';
-import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
 
 @Entity('transactions')
@@ -40,9 +40,11 @@ class Transaction {
   updated_at: Date;
 
   @ManyToOne(type => User, user => user.transactions)
+  @JoinColumn({  name: "user_id", referencedColumnName: "id" })
   user: User;
 
   @ManyToOne(type => RevExp, revExp => revExp.transactions)
+  @JoinColumn({  name: "rev_exp_id", referencedColumnName: "id" })
   revExp: RevExp;
 
 }
