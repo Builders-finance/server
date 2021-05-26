@@ -1,6 +1,6 @@
 
 import Transaction from '../../../../modules/transactions/typeorm/entities/Transaction';
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
 @Entity('rev_exp')
 class RevExp {
@@ -36,6 +36,10 @@ class RevExp {
 
   @OneToMany(type => Transaction, transaction => transaction.revExp)
   transactions: Transaction[];
+
+  @ManyToOne(type => RevExp)
+  @JoinColumn({  name: "rev_exp_id", referencedColumnName: "id" })
+  revExpChild: RevExp;
 
 }
 

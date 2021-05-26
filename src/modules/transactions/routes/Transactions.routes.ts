@@ -20,6 +20,15 @@ celebrate({
 }),
 transactionsController.show);
 
+transactionsRouter.get('/get-by-revexp/:id',
+isAuthenticated,
+celebrate({
+  [Segments.PARAMS]: {
+    id: Joi.string().uuid().required(),
+  },
+}),
+transactionsController.transactionsByRevExp);
+
 transactionsRouter.post(
   '/',
   isAuthenticated,
@@ -27,7 +36,6 @@ transactionsRouter.post(
     [Segments.BODY]: Joi.object().keys({
       description: Joi.string().allow(null, ''),
       rev_exp_id: Joi.string().uuid().required(),
-      user_id: Joi.string().uuid().required(),
       valor: Joi.number().required(),
       forma_pagamento: Joi.string().required().valid(PaymentType.cash, PaymentType.credit, PaymentType.debit, PaymentType.pix, PaymentType.bill),
       status_pagamento: Joi.string().required().valid(PaymentStatus.paid, PaymentStatus.unpaid, PaymentStatus.partial),

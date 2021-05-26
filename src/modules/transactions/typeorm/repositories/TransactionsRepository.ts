@@ -1,4 +1,5 @@
-import { EntityRepository, Repository, getConnection} from 'typeorm';
+import RevExp from '@modules/rev_exp/typeorm/entities/RevExp';
+import { EntityRepository, Repository, getConnection, createQueryBuilder} from 'typeorm';
 import Transaction from '../entities/Transaction';
 
 @EntityRepository(Transaction)
@@ -23,48 +24,21 @@ export class TransactionsRepository{
   }
 
   public async getJoin(userId: string) {
-    //inner join and paginate
+    const transactions = await this.repo.createQueryBuilder("trans")
+    .innerJoin("trans.revExp", "revexp")
+    .select(['revexp.name as nome', 'revexp.rec_des as rec_des', 'revexp.icon as icon', 'revexp.id as id'])
+    .addSelect('SUM(trans.valor)', 'valor')
+    .where("trans.user_id = :id", { id: userId })
+    .groupBy('revexp.name')
+    .addGroupBy('revexp.rec_des')
+    .addGroupBy('revexp.icon')
+    .addGroupBy('revexp.id')
 
-    let transactions = this.repo
-      .createQueryBuilder('transaction')
-      .where("transaction.user_id = :id", { id: userId })
-      .innerJoin('rev_exp', 'revexp', 'revexp.id = transaction.rev_exp_id')
-      .addSelect(['revexp.name', 'revexp.rev_exp_id', 'revexp.rec_des', 'revexp.icon'])
-      .getRawMany();
+    // console.log(transactions.getSql())
+    const result = transactions.getRawMany();
+    // console.log(result)
 
-
-    const result = (await transactions).map((tr, i, array) => {
-
-      let filtered = {
-        nome: tr.revexp_name,
-        valor: tr.transaction_valor,
-        rec_des: tr.revexp_rec_des,
-        icon: tr.revexp_icon,
-        id: tr.transaction_rev_exp_id
-      }
-      return filtered
-    })
-
-
-    var o: any = {};
-
-    result.forEach((i) => {
-      var obj = i.id;
-      i.valor = parseInt(i.valor)
-
-      if (!o[obj]) {
-        return o[obj] = i
-      }
-        return o[obj].valor = o[obj].valor + i.valor
-    })
-
-
-    var filteredTransactions: any = []
-    Object.keys(o).forEach((key) => {
-      filteredTransactions.push(o[key])
-    })
-
-    return filteredTransactions;
+    return result;
   }
 
   public async paginate() {
@@ -74,6 +48,14 @@ export class TransactionsRepository{
   public async findById(id: string): Promise<Transaction | undefined> {
     let trans = this.repo.createQueryBuilder('transaction').where("transaction.id = :id", { id: id }).getOne();
     return await trans
+  }
+
+  public async findByRevExpId(revExpId: string, userId: string): Promise<Transaction[] | undefined> {
+    let trans = this.repo.createQueryBuilder('transaction')
+      .where("transaction.rev_exp_id = :id", { id: revExpId })
+      .andWhere("transaction.user_id = :userId", { userId: userId })
+
+    return await trans.getMany();
   }
 }
 
