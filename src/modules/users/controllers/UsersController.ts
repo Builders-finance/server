@@ -6,15 +6,16 @@ import ShowUserService from "../services/ShowUserService";
 import UpdateUserService from "../services/UpdateUserService";
 import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
+import BaseController from "@shared/http/BaseController";
 
-export default class UsersController {
+export default class UsersController extends BaseController{
 
   public async index(request: Request, response: Response): Promise<Response> {
     const listUsers = container.resolve(ListUserService);
 
-    const users = await listUsers.execute();
+    const users = await listUsers.execute({page: request.query.page, limit: request.query.limit});
 
-    return response.json(classToClass(users));
+    return response.json(super.customResponse(classToClass(users)));
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
@@ -24,7 +25,7 @@ export default class UsersController {
 
     const user = await showUser.execute({ id });
 
-    return response.json(classToClass(user));
+    return response.json(super.customResponse(classToClass(user)));
   }
 
   public async create(request: Request, response: Response): Promise<Response>  {
@@ -39,7 +40,7 @@ export default class UsersController {
       password
     });
 
-    return response.json(classToClass(user));
+    return response.json(super.customResponse(classToClass(user)));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -56,7 +57,7 @@ export default class UsersController {
       old_password
     });
 
-    return response.json(classToClass(user));
+    return response.json(super.customResponse(classToClass(user)));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {

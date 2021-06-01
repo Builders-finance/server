@@ -2,6 +2,7 @@
 import { UsersRepository } from '../typeorm/repositories/UsersRepository';
 import User from '../typeorm/entities/User';
 import { injectable, inject } from 'tsyringe';
+import { paginateRepository, RequestPagination } from '@shared/typeorm/CustomPaginationMeta';
 interface IPagination {
   from: number;
   to: number;
@@ -19,11 +20,11 @@ class ListUserService {
     private userRepository: UsersRepository
     ) {};
 
-  public async execute(): Promise<IPagination> {
+  public async execute(paginate?: RequestPagination): Promise<any> {
 
-    const user = await this.userRepository.paginate();
+    const user =  await this.userRepository.findAll(paginate);
 
-    return user as IPagination;
+    return user;
   }
 }
 

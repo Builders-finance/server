@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import UpdateUserAvatarService from "../services/UpdateUserAvatarService";
 import { container } from 'tsyringe';
+import BaseController from "@shared/http/BaseController";
 
-export default class UserAvatarController {
+export default class UserAvatarController extends BaseController {
 
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -13,7 +14,7 @@ export default class UserAvatarController {
       avatarFilename: request.file.filename,
     });
 
-    return response.json(user);
+    return response.json(super.customResponse(user));
   }
 
 }

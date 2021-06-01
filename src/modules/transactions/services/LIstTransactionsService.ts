@@ -1,17 +1,8 @@
+import { paginateRawCustom, RequestPagination, IPagination } from '@shared/typeorm/CustomPaginationMeta';
 import { injectable, inject } from 'tsyringe';
-import Transaction from '../typeorm/entities/Transaction';
+import { ITransactionGrouped } from '../models/transaction-grouped';
 import TransactionsRepository from '../typeorm/repositories/TransactionsRepository';
 
-interface IPagination {
-  from: number;
-  to: number;
-  per_page: number;
-  total: number;
-  current_page: number;
-  prev_page: number | null;
-  next_page: number | null;
-  data: Transaction[];
-}
 
 @injectable()
 class ListTransactionService {
@@ -20,9 +11,9 @@ class ListTransactionService {
     private transactionsRepository: TransactionsRepository
     ) {};
 
-  public async execute(userId: string): Promise<any> {
+  public async execute(filter: {}, paginate?: RequestPagination): Promise<IPagination<ITransactionGrouped>> {
 
-    const transaction = await this.transactionsRepository.getJoin(userId);
+    const transaction = await paginateRawCustom(this.transactionsRepository.getJoin(filter), paginate);
     return transaction
   }
 }

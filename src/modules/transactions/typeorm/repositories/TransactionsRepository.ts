@@ -1,6 +1,8 @@
 import RevExp from '@modules/rev_exp/typeorm/entities/RevExp';
-import { EntityRepository, Repository, getConnection, createQueryBuilder} from 'typeorm';
+import { ITransactionGrouped } from '@modules/transactions/models/transaction-grouped';
+import { EntityRepository, Repository, getConnection, createQueryBuilder, SelectQueryBuilder} from 'typeorm';
 import Transaction from '../entities/Transaction';
+import moment from 'moment';
 
 @EntityRepository(Transaction)
 export class TransactionsRepository{
@@ -23,27 +25,34 @@ export class TransactionsRepository{
     return await this.repo.save(transaction);
   }
 
-  public async getJoin(userId: string) {
-    const transactions = await this.repo.createQueryBuilder("trans")
+  public getJoin(filter: any): SelectQueryBuilder<any>  {
+    const queryBuilder = this.repo.createQueryBuilder("trans")
     .innerJoin("trans.revExp", "revexp")
     .select(['revexp.name as nome', 'revexp.rec_des as rec_des', 'revexp.icon as icon', 'revexp.id as id'])
-    .addSelect('SUM(trans.valor)', 'valor')
-    .where("trans.user_id = :id", { id: userId })
+    .addSelect('CAST(SUM(trans.valor) as FLOAT)', 'valor')
+    .where("trans.user_id = :id", { id: filter.userId })
     .groupBy('revexp.name')
     .addGroupBy('revexp.rec_des')
     .addGroupBy('revexp.icon')
-    .addGroupBy('revexp.id')
+    .addGroupBy('revexp.id');
 
-    // console.log(transactions.getSql())
-    const result = transactions.getRawMany();
-    // console.log(result)
+    if(filter.day) {
+      queryBuilder.andWhere('trans.data::date = :dateFilter::date', { dateFilter: moment().day(filter.day).format('YYYY-MM-DD')})
+    }
+    if(filter.month) {
+      //to_char(t.data, 'MM-YYYY') = '05-2021'
+      queryBuilder.andWhere("to_char(trans.data, 'YYYY-MM') = :dateFilter", { dateFilter: moment().month(parseInt(filter.month) - 1).format('YYYY-MM')})
+    }
+    if(filter.year) {
+      queryBuilder.andWhere("to_char(trans.data, 'YYYY') = :dateFilter", { dateFilter: moment().year(filter.year).format('YYYY')})
+    }
 
-    return result;
+    return queryBuilder;
   }
 
-  public async paginate() {
-    return await this.repo.createQueryBuilder().paginate();
-  }
+  // public async paginate() {
+  //   return await this.repo.createQueryBuilder().paginate();
+  // }
 
   public async findById(id: string): Promise<Transaction | undefined> {
     let trans = this.repo.createQueryBuilder('transaction').where("transaction.id = :id", { id: id }).getOne();
