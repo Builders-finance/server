@@ -37,22 +37,17 @@ export class TransactionsRepository{
     .addGroupBy('revexp.id');
 
     if(filter.day) {
-      queryBuilder.andWhere('trans.data::date = :dateFilter::date', { dateFilter: moment().day(filter.day).format('YYYY-MM-DD')})
+      queryBuilder.andWhere('trans.data::date = :dayFilter::date', { dayFilter: moment().day(filter.day).format('YYYY-MM-DD')})
     }
     if(filter.month) {
-      //to_char(t.data, 'MM-YYYY') = '05-2021'
-      queryBuilder.andWhere("to_char(trans.data, 'YYYY-MM') = :dateFilter", { dateFilter: moment().month(parseInt(filter.month) - 1).format('YYYY-MM')})
+      queryBuilder.andWhere("to_char(trans.data, 'YYYY-MM') = :monthFilter", { monthFilter: moment().month(parseInt(filter.month) - 1).format('YYYY-MM')})
     }
     if(filter.year) {
-      queryBuilder.andWhere("to_char(trans.data, 'YYYY') = :dateFilter", { dateFilter: moment().year(filter.year).format('YYYY')})
+      queryBuilder.andWhere("to_char(trans.data, 'YYYY') = :yearFilter", { yearFilter: moment().year(parseInt(filter.year)).format('YYYY')})
     }
 
     return queryBuilder;
   }
-
-  // public async paginate() {
-  //   return await this.repo.createQueryBuilder().paginate();
-  // }
 
   public async findById(id: string): Promise<Transaction | undefined> {
     let trans = this.repo.createQueryBuilder('transaction').where("transaction.id = :id", { id: id }).getOne();

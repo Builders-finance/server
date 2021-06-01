@@ -23,7 +23,7 @@ export default class TransactionsController extends BaseController {
     let filter = Object.assign({
       userId
     }, request.query);
-
+    //TODO essa listagem não deve retornar paginada.
     const execListTransaction = await listTransaction.execute(filter, {page: request.query.page, limit: 30});
 
     return response.json(super.customResponse(execListTransaction));
