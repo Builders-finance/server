@@ -1,18 +1,8 @@
 
+import { paginateRawCustom, RequestPagination } from '@shared/typeorm/CustomPaginationMeta';
 import { injectable, inject } from 'tsyringe';
-import RevExp from '../typeorm/entities/RevExp';
 import RevExpRepository from '../typeorm/repositories/RevExpRepository';
 
-interface IPagination {
-  from: number;
-  to: number;
-  per_page: number;
-  total: number;
-  current_page: number;
-  prev_page: number | null;
-  next_page: number | null;
-  data: RevExp[];
-}
 @injectable()
 class ListRevExpService {
   constructor(
@@ -20,9 +10,8 @@ class ListRevExpService {
     private revExpRepository: RevExpRepository
     ) {};
 
-  public async execute(userId: string): Promise<any> {
-
-    const revExp = await this.revExpRepository.findCategories(userId);
+  public async execute(userId: string, paginate?: RequestPagination): Promise<any> {
+    const revExp = await paginateRawCustom(this.revExpRepository.findCategories(userId), paginate);
 
     return revExp;
   }

@@ -1,3 +1,4 @@
+import { paginateRepository, RequestPagination } from '@shared/typeorm/CustomPaginationMeta';
 import { EntityRepository, Repository, getCustomRepository, getConnection} from 'typeorm';
 import User from '../entities/User';
 @EntityRepository(User)
@@ -15,6 +16,10 @@ export class UsersRepository{
     });
 
     return user;
+  }
+
+  public async findAll(paginate?: RequestPagination) {
+    return await paginateRepository(this.repo, paginate);
   }
 
   public async findbyName(name: string): Promise<User | undefined> {
@@ -45,9 +50,9 @@ export class UsersRepository{
     return await this.repo.save(user);
   }
 
-  public async paginate() {
-    return await this.repo.createQueryBuilder().paginate();
-  }
+  // public async paginate() {
+  //   return await paginate(this.repo.createQueryBuilder().paginate();
+  // }
 }
 
 export default UsersRepository;
