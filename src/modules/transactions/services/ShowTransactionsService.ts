@@ -16,9 +16,9 @@ class ShowTransactionsService {
     private transactionsRepository: TransactionsRepository
     ) {};
 
-  public async execute({ id }: IRequest): Promise<Transaction> {
+  public async execute({ id }: IRequest, relations: []): Promise<Transaction> {
 
-    const transactions = await this.transactionsRepository.findById(id);
+    const transactions = await this.transactionsRepository.findById(id, relations);
 
     if(!transactions) {
       throw new AppError('Transações não encontrada.');

@@ -33,8 +33,13 @@ export default class TransactionsController extends BaseController {
     const { id } = request.params;
 
     const showTransactions = container.resolve(ShowTransactionsService);
+    let relations: any = [];
 
-    const transaction = await showTransactions.execute({ id });
+    if(request.query.with){
+      relations = String(request.query.with).split(',');
+    }
+
+    const transaction = await showTransactions.execute({ id }, relations);
 
     return response.json(super.customResponse(transaction));
   }

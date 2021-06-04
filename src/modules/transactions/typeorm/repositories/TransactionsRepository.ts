@@ -49,9 +49,17 @@ export class TransactionsRepository{
     return queryBuilder;
   }
 
-  public async findById(id: string): Promise<Transaction | undefined> {
-    let trans = this.repo.createQueryBuilder('transaction').where("transaction.id = :id", { id: id }).getOne();
-    return await trans
+  public async findById(id: string, relations?:[]): Promise<Transaction | undefined> {
+    let trans = this.repo.createQueryBuilder('transaction')
+    .where("transaction.id = :id", { id: id })
+
+    if(relations && relations.length > 0) {
+      relations.forEach(res => {
+        trans.leftJoinAndSelect('transaction.'+String(res), res);
+      })
+    }
+
+    return await trans.getOne();
   }
 
   public async findByRevExpId(revExpId: string, userId: string): Promise<Transaction[] | undefined> {
