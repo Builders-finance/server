@@ -1,4 +1,4 @@
-
+import RedisCache from '@shared/cache/RedisCache';
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import RevExp from '../typeorm/entities/RevExp';
@@ -15,13 +15,17 @@ interface IRequest {
 class CreateRevExpService {
   constructor(
     @inject('RevExpRepository')
-    private revExpRepository: RevExpRepository
-    ) {};
+    private revExpRepository: RevExpRepository,
+  ) {}
 
   public async execute(revExp: IRequest, userId: string): Promise<RevExp> {
-    revExp.user_id = userId;
-    return await this.revExpRepository.create(revExp as RevExp);
+    const redisCache = new RedisCache();
+    await redisCache.invalidate('revexp');
 
+    revExp.user_id = userId;
+    const rexp = await this.revExpRepository.create(revExp as RevExp);
+
+    return rexp;
   }
 }
 
