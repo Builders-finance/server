@@ -18,13 +18,13 @@
 
 <p align="center">
  <a href="#objetivo">Objetivo</a> •
- <a href="#roadmap">Features</a> • 
- <a href="#tecnologias">Recursos</a> • 
- <a href="#contribuicao">Tecnologiass</a> • 
+ <a href="#roadmap">Features</a> •
+ <a href="#tecnologias">Recursos</a> •
+ <a href="#contribuicao">Tecnologiass</a> •
  <a href="#autor">Autores</a>
 </p>
 
-<h4 align="center"> 
+<h4 align="center">
 	🚧  Back-end 🚀 Em construção...  🚧
 </h4>
 
@@ -47,8 +47,51 @@
 ### Pré-requisitos
 
 Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
-[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/). 
+[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/).
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
+configure o BD postgres com ormconfig.json e no terminal docker run --name postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres para subir a imagem.
+
+ormconfig example
+
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "docker",
+  "database": "apivendas",
+  "entities": [
+    "./src/modules/**/typeorm/entities/*.ts"
+  ],
+  "migrations": [
+    "./src/shared/typeorm/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationDir": "./src/shared/typeorm/migrations"
+  }
+}
+
+Não esquecer de criar o .env
+
+APP_SECRET=myscecret
+APP_API_URL=http://localhost:3333
+APP_WEB_URL=http://localhost:3000
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASS=
+
+# Mail Config: ethereal or ses
+MAIL_DRIVER=ethereal
+
+# Storage Config: disk or s3
+STORAGE_DRIVER=disk
+
+# AWS Credentials
+AWS_REGION=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+
+
 
 ### 🎲 Rodando o Back End (servidor)
 
@@ -64,7 +107,7 @@ $ cd server
 # Instale as dependências
 $ yarn install
 
-# Execute a aplicação 
+# Execute a aplicação
 $ yarn dev
 
 # O servidor inciará na porta:3333 - acesse <http://localhost:3333>
